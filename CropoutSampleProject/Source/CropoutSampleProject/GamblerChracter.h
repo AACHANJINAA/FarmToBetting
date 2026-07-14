@@ -19,6 +19,9 @@ public:
 	AGamblerChracter();
 
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	// 탑 다운 카메라를 위한 스프링 암 컴포넌트
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	USpringArmComponent* SpringArmComp;
@@ -28,21 +31,13 @@ protected:
 	UCameraComponent* CameraComp;
 
 public:
-	// 이동 함수 선언
-	void MoveForward(float AxisValue);
-	void MoveRight(float AxisValue);
-
-
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// 이동 함수 선언
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);
 };
