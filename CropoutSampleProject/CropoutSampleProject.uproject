@@ -3,6 +3,16 @@
 	"EngineAssociation": "5.8",
 	"Category": "Samples",
 	"Description": "",
+	"Modules": [
+		{
+			"Name": "CropoutSampleProject",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	],
 	"Plugins": [
 		{
 			"Name": "GeometryScripting",
