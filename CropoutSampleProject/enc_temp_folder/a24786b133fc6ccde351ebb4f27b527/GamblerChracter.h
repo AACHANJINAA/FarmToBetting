@@ -27,13 +27,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* CameraComp;
 
-public:
-	// 이동 함수 선언
-	void MoveForward(float AxisValue);
-	void MoveRight(float AxisValue);
-
-
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -45,4 +38,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// 이동 함수 선언
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);
 };

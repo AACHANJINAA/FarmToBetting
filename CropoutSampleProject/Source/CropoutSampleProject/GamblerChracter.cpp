@@ -42,4 +42,34 @@ void AGamblerChracter::Tick(float DeltaTime)
 void AGamblerChracter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// 입력 축(Axis) 바인딩
+	PlayerInputComponent->BindAxis("MoveForward", this, &AGamblerChracter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AGamblerChracter::MoveRight);
+}
+
+void AGamblerChracter::MoveForward(float AxisValue)
+{
+	if ((Controller != nullptr) && (AxisValue != 0.0f))
+	{
+		// 카메라가 바라보는 방향을 기준으로 앞/뒤 벡터를 구함
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, AxisValue);
+	}
+}
+
+void AGamblerChracter::MoveRight(float AxisValue)
+{
+	if ((Controller != nullptr) && (AxisValue != 0.0f))
+	{
+		// 카메라가 바라보는 방향을 기준으로 좌/우 벡터를 구함
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+	
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		AddMovementInput(Direction, AxisValue);
+	}
 }
