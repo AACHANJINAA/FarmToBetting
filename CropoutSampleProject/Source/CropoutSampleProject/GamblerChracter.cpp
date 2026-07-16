@@ -26,7 +26,7 @@ AGamblerChracter::AGamblerChracter()
 	SpringArmComp->SetupAttachment(RootComponent);
 
 	// SpringArmComp 설정
-	SpringArmComp->TargetArmLength = 800.0f; // 카메라와 캐릭터 사이의 거리
+	SpringArmComp->TargetArmLength = 600.0f; // 카메라와 캐릭터 사이의 거리
 	SpringArmComp->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f)); // 카메라 각도 설정
 	SpringArmComp->bUsePawnControlRotation = true; // 캐릭터 회전에 따라 카메라 회전
 
