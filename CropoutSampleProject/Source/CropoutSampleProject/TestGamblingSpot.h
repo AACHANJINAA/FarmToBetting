@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InteractableInterface.h"
+#include "CasinoTypes.h"
 #include "TestGamblingSpot.generated.h"
 
 class UStaticMeshComponent;
@@ -20,5 +21,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* MeshComp;
 
+	// 에디터에서 설정할 도박 종류
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gamble")
+	EGambleType SpotGambleType;
+
+	// 상호작용 시 이동할 레벨 이름
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gamble")
+	FName TargetLevelName;
+
 	virtual void Interact_Implementation(AActor* Interactor) override;
 };
+
