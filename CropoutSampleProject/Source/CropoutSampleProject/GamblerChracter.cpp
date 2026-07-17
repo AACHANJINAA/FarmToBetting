@@ -5,6 +5,9 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "InteractableInterface.h"
+#include "DrawDebugHelpers.h"
+#include "Engine/OverlapResult.h"
 
 // Sets default values
 AGamblerChracter::AGamblerChracter()
@@ -58,6 +61,9 @@ void AGamblerChracter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGamblerChracter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput); // 좌우 회전 (마우스 X)
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput); // 상하 회전 (마우스 Y)
+
+	// 상호작용 키 바인딩 (프로젝트 세팅 -> 입력에 'Interact' 액션 매핑 필요)
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AGamblerChracter::PerformInteraction);
 }
 
 void AGamblerChracter::MoveForward(float AxisValue)
@@ -85,3 +91,40 @@ void AGamblerChracter::MoveRight(float AxisValue)
 		AddMovementInput(Direction, AxisValue);
 	}
 }
+
+void AGamblerChracter::PerformInteraction()
+{
+	FVector PlayerLocation = GetActorLocation();
+	float InteractRadius = 150.0f; // 상호작용 반경 (필요시 늘리거나 줄이세요)
+	
+	TArray<FOverlapResult> OverlapResults;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this); // 자기 자신은 체크에서 제외
+
+	// 플레이어 주변(구형)으로 오버랩된 모든 액터 찾기
+	bool bHit = GetWorld()->OverlapMultiByChannel(
+		OverlapResults, PlayerLocation, FQuat::Identity,
+		ECC_Visibility, FCollisionShape::MakeSphere(InteractRadius), CollisionParams
+	);
+
+	// 트레이스 결과 디버그 라인 그리기 (초록색 = 무언가 찾음, 빨간색 = 못 찾음)
+	DrawDebugSphere(GetWorld(), PlayerLocation, InteractRadius, 12, bHit ? FColor::Green : FColor::Red, false, 2.0f);
+
+	if (bHit)
+	{
+		for (const FOverlapResult& Overlap : OverlapResults)
+		{
+			AActor* HitActor = Overlap.GetActor();
+			// 맞은 액터가 유효하고, 상호작용 인터페이스를 구현했는지 확인
+			if (HitActor && HitActor->Implements<UInteractableInterface>())
+			{
+				// 인터페이스 함수 호출
+				IInteractableInterface::Execute_Interact(HitActor, this);
+				
+				// 한 번에 하나의 객체랑만 상호작용하기 위해 break
+				break; 
+			}
+		}
+	}
+}
+

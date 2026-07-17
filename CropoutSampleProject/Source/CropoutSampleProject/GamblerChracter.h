@@ -40,4 +40,7 @@ public:
 	// 이동 함수 선언
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+
+	// 상호작용 함수
+	void PerformInteraction();
 };
